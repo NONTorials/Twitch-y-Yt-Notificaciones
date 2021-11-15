@@ -62,7 +62,7 @@ client.user.setPresence({
 
 client.on('message', async(message) =>{
   if(!message.guild || message.author.bot) return;
-//if(message.channel.id != "909616063635931167") return;
+if(message.channel.id != "909616063635931167") return;
 
   let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let cmd = args.shift().toLowerCase();
