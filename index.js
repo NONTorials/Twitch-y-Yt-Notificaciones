@@ -13,6 +13,7 @@ app.listen(3000, () => {
 //Empezamos el code
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const config = require('./config.json'); //cambia el nombre de config.example.json a config.json
 const db = require('quick.db')
 const prefix = "as!"
 const ytch = require('yt-channel-info');
@@ -21,9 +22,9 @@ const  twitch = require('twitchrequest');
 const twclient = new twitch.Client({
     channels: db.get('twcanales'),
 
-    client_id: process.env.twid,
+    client_id: config.twid,
 
-    client_secret:process.env.twsecret,
+    client_secret: config.twsecret,
 
     interval: 3
 });
@@ -63,7 +64,7 @@ client.user.setPresence({
 
 client.on('message', async(message) =>{
   if(!message.guild || message.author.bot) return;
-if(message.channel.id != "909616063635931167") return;
+if(message.channel.id != config.canalcomandos) return;
 
   let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let cmd = args.shift().toLowerCase();
@@ -105,7 +106,7 @@ if(!userData) return message.channel.send('> :x: | Canal invalido');
 
 
 
-client.login(process.env.tokendiscord)
+client.login(config.tokendiscord)
 
 process.on("uncaughtException", (err, origin) => {
   
@@ -119,12 +120,12 @@ process.on("uncaughtException", (err, origin) => {
 
 
 twclient.on('live', (data) => {
-    client.channels.resolve('908714598314700850').send(`**${data.name}** esta en vivo!\n> Streameando **${data.title}** en **${data.game ? data.game : 'no definido'} **!\n> Empezado: **${data.date}**`);
+    client.channels.resolve(config.canalnotistw).send(`**${data.name}** esta en vivo!\n> Streameando **${data.title}** en **${data.game ? data.game : 'no definido'} **!\n> Empezado: **${data.date}**\n> https://twitch.tv/`+data.name);
 });
 
 
 Notifier.on('video', video => {
-   const discord = client.channels.resolve('908714598314700850');
+   const discord = client.channels.resolve(config.canalnotisyt);
 discord.send(':eyes: | El canal **'+video.channelName+'** ha publicado el video **'+video.title+'**\n> https://twitch.tv/'+video.channelName)
    
 });
