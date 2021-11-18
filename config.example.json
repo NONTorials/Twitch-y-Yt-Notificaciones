@@ -1,2 +1,9 @@
 {
+  "twid": "ID de cliente twitch para fetchs",
+"twsecret": "secreto del cliente twitch",
+  "prefix": "!",
+  "canalcomandos": "id del canal a donde el bot responderá los comandos",
+  "tokendiscord": "token de tu bot Discord",
+  "canalnotisyt": "id del canal donde tu bot notificará videos de Youtube",
+  "canalnotistw": "id del canal donde tu bot notificará streams de Twitch"
 }
