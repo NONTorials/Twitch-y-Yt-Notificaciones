@@ -1,3 +1,4 @@
+//Aqui establecemos el servidor web con express por si lo hostearas via uptime en replit
 const express = require('express');
 
 const app = express();
@@ -5,11 +6,11 @@ const app = express();
 app.get('/', (req, res) => {
   res.send('?')
 });
-
+//Hacemos que escuche el puerto 3000
 app.listen(3000, () => {
 });
 
-//
+//Empezamos el code
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const db = require('quick.db')
