@@ -1,6 +1,6 @@
 ## Bienvenidos a el codigo del bot Twitch y YT Notis👋
 
-Este codigo está basado para una facil y rapida configuración, solo deberás agregar los datos que pide en config.example.json y cambiar el nombre de ese archivo a config.json
+**Este codigo está basado para una facil y rapida configuración, solo deberás agregar los datos que pide en config.example.json y cambiar el nombre de ese archivo a config.json**
 
 ### Hostearlo ☝
 
@@ -26,4 +26,4 @@ Si necesitas ayuda para configurar el bot o hay algun error puedes pedir ayuda e
 
 Puedes unirte a mi comunidad de Gaming llamada Arcane Sports
 
-- **[CLICL AQUI](https://discord.gg/4r66GxsmZ7)**
+- **[CLICK AQUI](https://discord.gg/4r66GxsmZ7)**
