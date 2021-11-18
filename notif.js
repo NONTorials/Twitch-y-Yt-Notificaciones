@@ -1,8 +1,12 @@
+//Este es un fork mio de otro npm, lo tuve que incorporar debido a que no me permitia instalarlo y asi es mas facil todo el trabajo
+
+//FAVOR DE NO MOVER ESTA AREA
 const { join } = require('path'),
 	EventEmitter = require('events'),
 	rss = require('rss-parser'),
 	parser = new rss();
 
+const YTNotisError = require('./error');
 if (typeof (localStorage) == 'undefined' || typeof (localStorage) == 'null') {
 	var LocalStorage = require('node-localstorage').LocalStorage;
 	localStorage = new LocalStorage(join(__dirname, 'storage'));
@@ -16,7 +20,7 @@ class Notifier extends EventEmitter {
 		super();
 		if (!options.checkInterval) options.checkInterval = 50;
 
-		if (!Array.isArray(options.channels)) throw new Error('Channels must be an array');
+		if (!Array.isArray(options.channels)) throw new YTNotisError('Los canales deben ser un Array');
 
 		this.ids = options.channels;
 		this.add = (channels) => {
@@ -26,16 +30,16 @@ class Notifier extends EventEmitter {
 						let videoid = response.items[0].id.replace('yt:video:', '');
 						localStorage.setItem(videoid, videoid);
 					}).catch(err => {
-						if (err.message == 'Status code 404') return console.warn(`Channel not found. Channel ID: ${id}`);
+						if (err.message == 'Status code 404') throw new YTNotisError(`Canal no encontrado. ID del Canal : ${id}`);
 						console.warn(err);
 					});
 			});
 		}
 		this.add(options.channels);
 		if (typeof (options.checkInterval) != 'number') {
-			throw new Error('Check interval must be a number');
+			throw new YTNotisError('El intervalo de revision debe ser un numero!');
 		} else if (options.checkInterval < 30) {
-			console.warn('Check interval is too short. Short intervals can cause problems.');
+			throw new YTNotisError('El intervalo es muy corto, podria generar problemas');
 		};
 
 		setInterval(() => {
@@ -54,7 +58,7 @@ class Notifier extends EventEmitter {
 						this.emit('video', video);
 					})
 					.catch(err => {
-						if (err.message == 'Status code 404') return console.warn(`Channel not found. Channel ID: ${id}`);
+						if (err.message == 'Status code 404') throw new YTNotisError(`Canal no encontrado. ID del canal: ${id}`);
 						console.warn(err);
 					});
 
@@ -63,8 +67,8 @@ class Notifier extends EventEmitter {
 	}
 	addChannels(channels) {
 		return new Promise((resolve, reject) => {
-			if (!Array.isArray(channels)) return reject('Channels must be an array');
-			if (channels.length == 0) return reject('Please provide channel IDs');
+			if (!Array.isArray(channels)) return reject('Los canales deben ser un Array');
+			if (channels.length == 0) return reject('Debes declarar IDs de canales');
 			var result = [],
 				i = 0,
 				check = (data) => {
@@ -80,7 +84,7 @@ class Notifier extends EventEmitter {
 					check({ result: true, channelID: channel });
 				}).catch(err => {
 					if (err.message == 'Status code 404') {
-						check({ result: 'Channel not found.', channelID: channel });;
+						check({ result: 'Canal no encontrado.', channelID: channel });;
 					} else {
 						check({ result: err, channelID: channel });
 					}
@@ -91,8 +95,8 @@ class Notifier extends EventEmitter {
 
 	removeChannels(channels) {
 		return new Promise((resolve, reject) => {
-			if (!Array.isArray(channels)) return reject('Channels must be an array');
-			if (channels.length == 0) return reject('Please provide channel IDs');
+			if (!Array.isArray(channels)) return reject('Los canales deben ser un Array');
+			if (channels.length == 0) return reject('Debes declarar las IDs de los canales');
 			var result = [],
 				i = 0,
 				check = (data) => {
@@ -103,7 +107,7 @@ class Notifier extends EventEmitter {
 
 			channels.forEach(channel => {
 				if (!this.ids.some(url => url == channel)) {
-					check({ result: 'Unknown channel', channelID: channel });
+					check({ result: 'Canal desconocido', channelID: channel });
 				}
 				for (let i = 0; i < this.ids.length; i++) {
 					if (!this.ids[i] == channel) return;
